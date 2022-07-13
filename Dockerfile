@@ -6,6 +6,12 @@ RUN apt-get update \
         && usermod --shell /bin/bash yayo-oldman \
         && pip3 install cryptography
 
+## For testing purposes ##
+ENV bobspwd 1234
+RUN useradd --no-create-home bob \
+        && echo "bob:${bobspwd}" | chpasswd
+##          **          ## 
+
 COPY ./calculadora /tmp/calculadora/
 
 COPY --chown=yayo-oldman:yayo-oldman ./infection /home/yayo-oldman/infection/
