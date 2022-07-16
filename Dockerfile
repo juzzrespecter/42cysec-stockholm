@@ -20,4 +20,4 @@ USER yayo-oldman
 
 WORKDIR /tmp/calculadora
 
-CMD /bin/bash
+CMD tail -f /dev/null
