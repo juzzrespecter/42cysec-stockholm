@@ -7,6 +7,11 @@ For the encryption logic, stockholm uses the Fernet cryptography Python library.
 Have fun!  
 
 ## usage
+Set up victim environment:
+```
+./start.sh [up | exec | listen]
+```
+Ransomware script:
 ```
 python3 stockholm.py [-h | -s | -v | -r DECRYPT_KEY] 
 ```

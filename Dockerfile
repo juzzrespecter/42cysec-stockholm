@@ -4,7 +4,8 @@ RUN apt-get update \
         && apt-get install python3 python3-pip -y \
         && useradd -m -d /home/yayo-oldman yayo-oldman \
         && usermod --shell /bin/bash yayo-oldman \
-        && pip3 install cryptography
+        && pip3 install cryptography \
+        && rm -rf /var/lib/apt/lists/*
 
 ## For testing purposes ##
 ENV bobspwd 1234
