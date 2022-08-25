@@ -16,6 +16,9 @@ case $1 in
 			$HOST_FLAG \
 			stockholm &	
 	;;
+	"down")
+		docker stop stockholm
+		docker rm stockholm
 	"exec")
 		docker exec -it stockholm /bin/bash
 	;;
@@ -24,6 +27,6 @@ case $1 in
 		tail -f .key_log
 	;;
 	*)
-		echo "usage: ./start.sh up | exec | listen"
+		echo "usage: ./start.sh up | down | exec | listen"
 	;;
 esac
